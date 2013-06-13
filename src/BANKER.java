@@ -50,73 +50,72 @@ public class BANKER {
 				l2 = 0;//把 column規0
 			}
 		}
-		int c3 = 0;//
-		while (in3.hasNext()) {//
-			Avail[c3] = in3.nextInt();//
-			c3++;//
+		int c3 = 0;//控制陣列的位置
+		while (in3.hasNext()) {//開始讀檔
+			Avail[c3] = in3.nextInt();//將數字填入avail陣列
+			c3++;//陣列位置增加
 		}
 		for (int i = 0; i < (count2 / count1); i++) {
 			for (int j = 0; j < (count1); j++) {
-				TAllo[i][j] = Allo[i][j];//
+				TAllo[i][j] = Allo[i][j];//設一個暫存的allocation 陣列 儲存
 			}
 		}
 		for (int i = 0; i < (count2 / count1); i++) {
-			for (int j = 0; j < (count1); j++) {//
-				Need[i][j] = (Max[i][j] - Allo[i][j]);//
+			for (int j = 0; j < (count1); j++) {//由兩個count相除可以看出process個數
+				Need[i][j] = (Max[i][j] - Allo[i][j]);//用max-allocation可以得到need
 			}
 		}
-		System.out.println("Allocation ");//
+		System.out.println("Allocation ");//印出allocation字樣
 		for (int i = 0; i < (count2 / count1); i++) {
 			for (int j = 0; j < (count1); j++) {
-				System.out.print(Allo[i][j] + " ");//
+				System.out.print(Allo[i][j] + " ");//由雙重迴圈 印出陣列內的每一個值
 			}
 			System.out.println();
 		}
-		System.out.println("Max ");//
+		System.out.println("Max ");//印出max字樣
 		for (int i = 0; i < (count2 / count1); i++) {
 			for (int j = 0; j < (count1); j++) {
-				System.out.print(Max[i][j] + " ");//
+				System.out.print(Max[i][j] + " ");//由雙重迴圈 印出陣列內的每一個值
 			}
 			System.out.println();
 
 		}
-		System.out.println("Available ");//
+		System.out.println("Available ");//印出available字樣
 		for (int i = 0; i < Avail.length; i++) {
-			System.out.print(Avail[i] + " ");//
+			System.out.print(Avail[i] + " ");//由雙重迴圈 印出陣列內的每一個值
 		}
 		System.out.println();
-		System.out.println("Need ");//
+		System.out.println("Need ");//印出need字樣
 		for (int i = 0; i < (count2 / count1); i++) {
 			for (int j = 0; j < (count1); j++) {
-				System.out.print(Need[i][j] + " ");//
+				System.out.print(Need[i][j] + " ");//由雙重迴圈 印出陣列內的每一個值
 			}
 			System.out.println();
 		}
-		int times = ((count2 / count1) * ((count2 / count1) - 1)) / 2;//
+		int times = ((count2 / count1) * ((count2 / count1) - 1)) / 2;//計算出此演算法最多會執行(n*n-1)/2次
 		int cc = 0;
-		int work[] = new int[count1];//
-		for (int i = 0; i < work.length; i++) {//
-			work[i] = Avail[i];//
+		int work[] = new int[count1];//設一個work陣列 長度與available相同
+		for (int i = 0; i < work.length; i++) {//使用一個迴圈跑 available 陣列長度的次數
+			work[i] = Avail[i];//初始work 把available的值放入
 		}
 		int n1 = 0;
-		int f[] = new int[(count2 / count1)];//
-		boolean ff = true;//
-		int num = (count2 / count1);//
+		int f[] = new int[(count2 / count1)];//宣告一陣列來判斷是否該地process 已被執行
+		boolean ff = true;//布林值為判斷的標準
 		while (cc < times) {
-			if (check(work, Need, n1) == true) {//
-				workadd(work, TAllo, n1);//
-				cccheck(f, n1);//
+			if (check(work, Need, n1) == true) {//檢查是否need小於等於work
+				workadd(work, TAllo, n1);//以上符合 開始增加work
+				cccheck(f, n1);//記錄哪個process已被執行
 			}
-			cc++;//
-			n1++;//
+			cc++;//執行次數
+			n1++;//陣列的位置
 			if (n1 >= (count2 / count1)) {
 				n1 = 0;
 			}
 		}
 		for (int i = 0; i < f.length; i++) {
-			if (f[i] == 0) {//
-				ff = false;//
-				break;//
+			if (f[i] == 0) {//如果判斷式的位置為零代表不被執行
+				ff = false;//就判定為unsafe
+				break;//結束判斷迴圈
 			}
 		}
 		System.out.println("(1)執行safety Algorithm:");//
