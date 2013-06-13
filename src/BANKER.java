@@ -118,37 +118,35 @@ public class BANKER {
 				break;//結束判斷迴圈
 			}
 		}
-		System.out.println("(1)執行safety Algorithm:");//
-		if (ff == true) {//
+		System.out.println("(1)執行safety Algorithm:");//因出字樣
+		if (ff == true) {//如果判斷式為成立的  那麼演算法為安全
 			System.out.println("safe");
-		} else {
-			System.out.println("unsafe");//
-		}
+		
 		System.out.println("(2)執行Resource-Request Algorithm:");
-		Scanner in4 = new Scanner(System.in);//
-		System.out.print("請輸入欲提出request的process:");
-		int s = in4.nextInt();//
+		Scanner in4 = new Scanner(System.in);//設立一個掃描器讓使用者輸入
+		System.out.print("請輸入欲提出request的process:(數字)");
+		int s = in4.nextInt();//讀入使用者輸入的process代號
 		System.out.print("請輸入欲提出request的值(空格區分)");
-		int Rqest[] = new int[work.length];//
+		int Rqest[] = new int[work.length];//此為裝置request值得陣列
 		for (int i = 0; i < Rqest.length; i++) {
-			Rqest[i] = in4.nextInt();//
+			Rqest[i] = in4.nextInt();//讓使用者輸入requese值
 		}
 		int rwork[] = new int[work.length];
 		int F[] = new int[(count2 / count1)];
 		int dd = 0;
 		int n2 = 0;
-		if (RRAstep1(Rqest, Need, s) == true) {
-			if (RRAstep2(Rqest, Avail) == true) {
+		if (RRAstep1(Rqest, Need, s) == true) {//檢查第一步驟是否成立
+			if (RRAstep2(Rqest, Avail) == true) {//檢查第二步驟是否成立
 				Cavail(Avail, Rqest);
 				for (int i = 0; i < rwork.length; i++) {
 					rwork[i] = Avail[i];
 				}
-				CAllo(Allo, Rqest, s);
-				CNeed(Need, Rqest, s);
-				while (dd < times) {
-					if (Rcheck(rwork, Need, n2) == true) {
-						Rworkadd(rwork, Allo, n2);
-						Rcccheck(F, n2);//
+				CAllo(Allo, Rqest, s);//改變allocation
+				CNeed(Need, Rqest, s);//改變need
+				while (dd < times) {//在執行一次safey 演算法
+					if (Rcheck(rwork, Need, n2) == true) {//再次檢查woek是否有比need小
+						Rworkadd(rwork, Allo, n2); //增加work
+						Rcccheck(F, n2); //確定完成的process
 					}
 					dd++;
 					n2++;
@@ -163,16 +161,19 @@ public class BANKER {
 					}
 				}
 				if (ff == true) {
-					System.out.println("safe");
+					System.out.println("safe"); 
 				} else {
-					System.out.println("unsafe");
+					System.out.println("unsafe"); 
 				}
 
 			} else {
-				System.out.print("error step2");
+				System.out.print("error Request >Available");//印出第二步驟錯誤字樣
 			}
 		} else {
-			System.out.print("error step1");
+			System.out.print("error  Request >Need");//印出第一步驟錯誤字樣
+		}
+		} else {
+			System.out.println("unsafe");//如果判斷式為非  演算法為不安全的
 		}
 	}
 
@@ -183,38 +184,38 @@ public class BANKER {
 	private static int[] Rworkadd(int[] rwork, int[][] allo, int n2) {
 		for (int i = 0; i < rwork.length; i++) {
 			rwork[i] += allo[n2][i];
-			allo[n2][i] = 0;
+			allo[n2][i] = 0; 
 		}
-		return rwork;
+		return rwork; 
 	}
 
 	private static boolean Rcheck(int[] rwork, int[][] need, int n2) {
 		int ck = 0;
 		for (int i = 0; i < rwork.length; i++) {
-			if (rwork[i] >= need[n2][i]) {
-				ck++;
+			if (rwork[i] >= need[n2][i]) {//比較need是否小於等於work
+				ck++;//往下比較
 			}
 		}
-		return (ck == rwork.length);
+		return (ck == rwork.length);//回傳
 	}
 
 	private static int[][] CNeed(int[][] need, int[] rqest, int s) {
 		for (int i = 0; i < rqest.length; i++) {
-			need[s][i] -= rqest[i];
+			need[s][i] -= rqest[i];//need扣掉request
 		}
-		return need;
+		return need;//回傳need
 	}
 
 	private static int[][] CAllo(int[][] allo, int[] rqest, int s) {
 		for (int i = 0; i < rqest.length; i++) {
-			allo[s][i] += rqest[i];
+			allo[s][i] += rqest[i];//allocation 要加上request
 		}
-		return allo;
+		return allo;//回傳allocation
 	}
 
 	private static int[] Cavail(int[] avail, int[] rqest) {
 		for (int i = 0; i < avail.length; i++) {
-			avail[i] -= rqest[i];
+			avail[i] -= rqest[i];//將available 扣掉request的值
 		}
 		return avail;
 	}
@@ -222,42 +223,42 @@ public class BANKER {
 	private static boolean RRAstep2(int[] rqest, int[] avail) {
 		int d = 0;
 		for (int i = 0; i < rqest.length; i++) {
-			if (rqest[i] <= avail[i]) {
-				d++;
+			if (rqest[i] <= avail[i]) {//檢查request值有沒有比available小
+				d++;//往下檢查
 			}
 		}
-		return (d == rqest.length);
+		return (d == rqest.length);//回傳是否為真
 	}
 
 	private static boolean RRAstep1(int[] rqest, int[][] need, int s) {
 		int d = 0;
 		for (int i = 0; i < rqest.length; i++) {
-			if (rqest[i] <= need[s][i]) {
-				d++;
+			if (rqest[i] <= need[s][i]) {//檢查每個requese值有沒有比need小
+				d++;//往下檢查
 			}
 		}
-		return (d == rqest.length);
+		return (d == rqest.length);//回傳是否為真
 	}
 
 	private static void cccheck(int[] f, int n1) {
-		f[n1] = 1;
+		f[n1] = 1;//或process i 被執行完  就用1代表
 	}
 
 	private static boolean check(int[] work, int[][] need, int n1) {
 		int ck = 0;
 		for (int i = 0; i < work.length; i++) {
-			if (work[i] >= need[n1][i]) {
-				ck++;
+			if (work[i] >= need[n1][i]) {//檢查work中的每個值是否都比need大
+				ck++;//往下檢查
 			}
 		}
-		return (ck == work.length);
+		return (ck == work.length);//回傳是否為真
 	}
 
 	private static int[] workadd(int[] work, int[][] tallo, int n1) {
 		for (int i = 0; i < work.length; i++) {
-			work[i] += tallo[n1][i];
-			tallo[n1][i] = 0;
+			work[i] += tallo[n1][i];//把allocation累加到work中
+			tallo[n1][i] = 0;//加完後allocation歸零
 		}
-		return work;
+		return work;//回傳累加的work值
 	}
 }
